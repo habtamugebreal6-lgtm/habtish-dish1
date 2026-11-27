@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="am" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>HABTISH DISH | ሀብትሽ ዲሽ & ማርኬት</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'Noto Sans Ethiopic', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f3f1ff',
+              100: '#ebe5ff',
+              200: '#d9ceff',
+              300: '#bea6ff',
+              400: '#9f75ff',
+              500: '#7c3aed',
+              600: '#6d28d9',
+              700: '#5b21b6',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    body {
+      font-family: 'Inter', 'Noto Sans Ethiopic', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-slide { animation: fadeSlide 0.25s ease-out forwards; }
+  </style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200 selection:bg-brand-500 selection:text-white">
+
+  <!-- Mobile-First App Shell -->
+  <div id="app" class="max-w-md mx-auto min-h-screen bg-white dark:bg-slate-900 shadow-2xl relative pb-24 flex flex-col">
+
+    <!-- Top Sticky Header -->
+    <header class="sticky top-0 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 px-3 py-2.5 flex items-center justify-between gap-1">
+      <!-- Left: Menu & Prominent Admin Button -->
+      <div class="flex items-center gap-1">
+        <button onclick="toggleDrawer('menuDrawer')" aria-label="Menu" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <svg class="w-5 h-5 text-slate-800 dark:text-slate-100" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h12" />
+          </svg>
+        </button>
+        <button id="headerAdminBtn" onclick="openAdminModal()" class="px-2 py-1 rounded-xl bg-amber-100 dark:bg-amber-950/80 border border-amber-300 dark:border-amber-700 text-amber-800 dark:text-amber-300 text-[11px] font-extrabold flex items-center gap-1 shadow-xs active:scale-95 transition">
+          <span>🔐</span>
+          <span id="headerAdminLabel">አድሚን</span>
+        </button>
+      </div>
+
+      <!-- Center: Brand Logo -->
+      <div class="text-center cursor-pointer" onclick="resetFilters()">
+        <div class="flex items-center justify-center gap-0.5">
+          <span class="text-base font-extrabold tracking-tight text-slate-900 dark:text-white">HABTISH</span>
+          <span class="text-base font-extrabold tracking-tight text-brand-600 dark:text-brand-400">DISH</span>
+        </div>
+        <p class="text-[9px] font-semibold text-slate-400 -mt-1">ሀብትሽ ዲሽ &amp; ማርኬት</p>
+      </div>
+
+      <!-- Right: Language, Theme, Notifications & Cart -->
+      <div class="flex items-center gap-1">
+        <select id="langSelect" onchange="changeLanguage(this.value)" class="text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-lg px-1.5 py-1 border-none outline-none cursor-pointer">
+          <option value="am">አማ</option>
+          <option value="en">EN</option>
+          <option value="om">OR</option>
+          <option value="ti">ትግ</option>
+        </select>
+
+        <button onclick="toggleTheme()" aria-label="Toggle Theme" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition">
+          <svg class="w-4 h-4 hidden dark:block text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <svg class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        </button>
+
+        <button onclick="toggleDrawer('notifDrawer')" aria-label="Notifications" class="relative p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <svg class="w-4 h-4 text-slate-700 dark:text-slate-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+          <span class="absolute top-0.5 right-0.5 w-3.5 h-3.5 rounded-full bg-brand-600 text-white text-[9px] font-bold flex items-center justify-center">3</span>
+        </button>
+
+        <button onclick="toggleDrawer('cartDrawer')" aria-label="Cart" class="relative p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <svg class="w-4 h-4 text-slate-700 dark:text-slate-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+          <span id="cartBadge" class="absolute top-0.5 right-0.5 w-3.5 h-3.5 rounded-full bg-rose-500 text-white text-[9px] font-bold flex items-center justify-center">0</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Admin Control Bar (Appears Immediately When Admin Mode is ON) -->
+    <div id="adminBanner" class="hidden mx-3 mt-2.5 p-3 rounded-2xl bg-gradient-to-r from-amber-500/20 via-orange-500/15 to-amber-500/20 border border-amber-400/60 shadow-xs space-y-2">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+          <span class="text-xs font-extrabold text-amber-900 dark:text-amber-300">🔓 ADMIN MODE ክፍት ነው</span>
+        </div>
+        <button onclick="logoutAdmin()" class="px-2.5 py-1 rounded-lg bg-slate-800 text-white dark:bg-slate-700 text-[11px] font-bold">ዝጋ (Exit)</button>
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="openProductFormModal()" class="py-2 px-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-[11px] font-extrabold shadow-xs flex items-center justify-center gap-1">
+          <span>➕ አዲስ ዕቃ / ሶፍትዌር</span>
+        </button>
+        <button onclick="openAccountSettingsModal()" class="py-2 px-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-extrabold shadow-xs flex items-center justify-center gap-1">
+          <span>⚙️ አካውንት አስተካክል</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Search & Filter Bar -->
+    <div class="px-4 pt-3 pb-2">
+      <div class="relative flex items-center bg-slate-50 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700 rounded-2xl px-3.5 py-2.5 shadow-sm focus-within:border-brand-500 focus-within:ring-2 focus-within:ring-brand-500/20 transition">
+        <svg class="w-5 h-5 text-slate-400 mr-2.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input id="searchInput" type="text" oninput="handleSearch(this.value)" placeholder="ሪሲቨር፣ ሶፍትዌር፣ VIP ሰርቨር ወይም ፍሪኩዌንሲ ይፈልጉ..." class="w-full bg-transparent text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 outline-none" />
+        <button onclick="openAdminModal()" title="Admin Settings" class="ml-2 p-1.5 rounded-lg text-slate-500 hover:text-brand-600 hover:bg-brand-50 dark:hover:bg-slate-700 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Scrollable Content -->
+    <main id="mainContent" class="flex-1 space-y-5 px-4 pt-2">
+
+      <!-- Hero Promo Banner Card -->
+      <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#ebe4ff] via-[#dfd3ff] to-[#cbb8ff] dark:from-brand-950 dark:via-indigo-950 dark:to-purple-900 p-5 shadow-sm">
+        <div id="heroSlideContainer" class="relative z-10 flex items-center justify-between min-h-[150px]"></div>
+        <div class="absolute -right-4 -bottom-4 opacity-25 dark:opacity-20 pointer-events-none">
+          <svg class="w-40 h-40 text-brand-700 dark:text-brand-300" viewBox="0 0 120 120" fill="none">
+            <circle cx="60" cy="60" r="52" stroke="currentColor" stroke-width="2" stroke-dasharray="6 6"/>
+            <path d="M30 80 C 30 40, 80 30, 90 70" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="72" cy="48" r="6" fill="currentColor"/>
+            <line x1="60" y1="62" x2="72" y2="48" stroke="currentColor" stroke-width="3"/>
+          </svg>
+        </div>
+        <div id="heroDots" class="relative z-10 flex items-center justify-center gap-1.5 mt-3"></div>
+      </section>
+
+      <!-- 6 Circular Categories Row -->
+      <section>
+        <div class="flex items-center justify-between gap-2 overflow-x-auto no-scrollbar py-1">
+          <!-- 1: All -->
+          <button onclick="resetFilters()" class="flex flex-col items-center shrink-0 group">
+            <div class="w-[50px] h-[50px] rounded-full bg-orange-50 dark:bg-orange-950/50 border border-orange-100 dark:border-orange-800/60 flex items-center justify-center group-hover:scale-105 transition shadow-xs">
+              <svg class="w-5 h-5 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+              </svg>
+            </div>
+            <span data-i18n="catAll" class="text-[11px] font-semibold text-slate-700 dark:text-slate-300 mt-1.5">ሁሉም</span>
+          </button>
+
+          <!-- 2: Receivers -->
+          <button onclick="filterByCategory('receivers')" class="flex flex-col items-center shrink-0 group">
+            <div class="w-[50px] h-[50px] rounded-full bg-rose-50 dark:bg-rose-950/50 border border-rose-100 dark:border-rose-800/60 flex items-center justify-center group-hover:scale-105 transition shadow-xs">
+              <svg class="w-5 h-5 text-rose-600 dark:text-rose-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <rect x="2" y="7" width="20" height="10" rx="2.5"/>
+                <circle cx="7" cy="12" r="1.5" fill="currentColor"/>
+                <line x1="12" y1="12" x2="18" y2="12" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span data-i18n="catReceivers" class="text-[11px] font-semibold text-slate-700 dark:text-slate-300 mt-1.5">ሪሲቨሮች</span>
+          </button>
+
+          <!-- 3: Software -->
+          <button onclick="filterByCategory('software')" class="flex flex-col items-center shrink-0 group">
+            <div class="w-[50px] h-[50px] rounded-full bg-sky-50 dark:bg-sky-950/50 border border-sky-100 dark:border-sky-800/60 flex items-center justify-center group-hover:scale-105 transition shadow-xs">
+              <svg class="w-5 h-5 text-sky-600 dark:text-sky-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+              </svg>
+            </div>
+            <span data-i18n="catSoftware" class="text-[11px] font-semibold text-slate-700 dark:text-slate-300 mt-1.5">ሶፍትዌር</span>
+          </button>
+
+          <!-- 4: VIP Servers -->
+          <button onclick="filterByCategory('servers')" class="flex flex-col items-center shrink-0 group">
+            <div class="w-[50px] h-[50px] rounded-full bg-amber-50 dark:bg-amber-950/50 border border-amber-100 dark:border-amber-800/60 flex items-center justify-center group-hover:scale-105 transition shadow-xs">
+              <svg class="w-5 h-5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2"/>
+              </svg>
+            </div>
+            <span data-i18n="catServers" class="text-[11px] font-semibold text-slate-700 dark:text-slate-300 mt-1.5">VIP ሰርቨር</span>
+          </button>
+
+          <!-- 5: Frequencies -->
+          <button onclick="scrollToSection('freqSection')" class="flex flex-col items-center shrink-0 group">
+            <div class="w-[50px] h-[50px] rounded-full bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-100 dark:border-emerald-800/60 flex items-center justify-center group-hover:scale-105 transition shadow-xs">
+              <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/>
+              </svg>
+            </div>
+            <span data-i18n="catFreq" class="text-[11px] font-semibold text-slate-700 dark:text-slate-300 mt-1.5">ፍሪኩዌንሲ</span>
+          </button>
+
+          <!-- 6: Accessories -->
+          <button onclick="filterByCategory('accessories')" class="flex flex-col items-center shrink-0 group">
+            <div class="w-[50px] h-[50px] rounded-full bg-purple-50 dark:bg-purple-950/50 border border-purple-100 dark:border-purple-800/60 flex items-center justify-center group-hover:scale-105 transition shadow-xs">
+              <svg class="w-5 h-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="3"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 2v3m0 14v3M4.93 4.93l2.12 2.12m9.9 9.9l2.12 2.12M2 12h3m14 0h3"/>
+              </svg>
+            </div>
+            <span data-i18n="catAcc" class="text-[11px] font-semibold text-slate-700 dark:text-slate-300 mt-1.5">አክሰሰሪ</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Deals of the Day -->
+      <section>
+        <div class="flex items-center justify-between mb-2.5">
+          <div class="flex items-center gap-2">
+            <h2 data-i18n="dealsTitle" class="text-base font-extrabold text-slate-900 dark:text-white">የዕለቱ ልዩ ቅናሾች</h2>
+            <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-rose-100 text-rose-600 dark:bg-rose-950 dark:text-rose-400">HOT</span>
+          </div>
+          <button onclick="resetFilters()" class="text-xs font-semibold text-brand-600 dark:text-brand-400 flex items-center gap-0.5 hover:underline">
+            <span data-i18n="viewAll">ሁሉንም ይዩ</span>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+        <div id="dealsCarousel" class="flex gap-3 overflow-x-auto no-scrollbar pb-1"></div>
+      </section>
+
+      <!-- Popular Products & Services (Dense 2-Column Grid) -->
+      <section>
+        <div class="flex items-center justify-between mb-2.5">
+          <div>
+            <h2 data-i18n="popularTitle" class="text-base font-extrabold text-slate-900 dark:text-white">ተፈላጊ ዕቃዎች &amp; አገልግሎቶች</h2>
+            <p id="activeFilterLabel" class="text-[11px] text-slate-400">ሁሉም ሪሲቨሮች፣ VIP ሰርቨሮች እና ሶፍትዌሮች</p>
+          </div>
+          <span id="itemCountBadge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">0</span>
+        </div>
+        <div id="productGrid" class="grid grid-cols-2 gap-2.5"></div>
+      </section>
+
+      <!-- Live Satellite Frequencies & BISS Keys -->
+      <section id="freqSection" class="pt-1">
+        <div class="flex items-center justify-between mb-2.5">
+          <div class="flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+            <h2 data-i18n="freqTitle" class="text-base font-extrabold text-slate-900 dark:text-white">አዳዲስ ፍሪኩዌንሲ &amp; BISS Keys</h2>
+          </div>
+          <button id="addFreqAdminBtn" onclick="openProductFormModal('frequencies')" class="hidden text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-600 text-white">+ ፍሪኩዌንሲ ጨምር</button>
+        </div>
+        <div id="freqList" class="space-y-2"></div>
+      </section>
+
+      <!-- Direct Telegram & Support Banner (Dynamically reflects edited links) -->
+      <section id="supportBanner" class="rounded-2xl bg-slate-900 dark:bg-slate-800 text-white p-4 flex items-center justify-between shadow-md">
+        <div>
+          <p class="text-[11px] uppercase tracking-wider text-brand-300 font-bold">HABTISH DISH &amp; SOFTWARE</p>
+          <h3 class="text-sm font-bold mt-0.5">ለሪሲቨር ሶፍትዌር &amp; ሰርቨር ሙላት</h3>
+          <p id="bannerAdminText" class="text-xs text-slate-300 mt-0.5">Admin: @habtamu7782 | Software Channel</p>
+        </div>
+        <div class="flex flex-col gap-1.5 shrink-0">
+          <a id="bannerSoftLink" href="https://t.me/Habtshesoftware" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-[11px] font-bold flex items-center justify-center gap-1 transition shadow">
+            <span>📥 Software Channel</span>
+          </a>
+          <a id="bannerAdminLink" href="https://t.me/habtamu7782" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-[11px] font-bold flex items-center justify-center gap-1 transition shadow">
+            <span id="bannerAdminHandleBtn">💬 @habtamu7782</span>
+          </a>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Floating Admin '+' (ፕላስ) Button -->
+    <button id="floatingAdminPlusBtn" onclick="openProductFormModal()" title="አዲስ ዕቃ ወይም ሶፍትዌር ይጨምሩ (+)" class="hidden fixed bottom-20 right-4 sm:right-[calc(50%-13rem)] z-40 w-14 h-14 rounded-full bg-brand-600 hover:bg-brand-700 active:scale-95 text-white shadow-2xl shadow-brand-600/40 flex items-center justify-center text-3xl font-extrabold transition">
+      +
+    </button>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="fixed bottom-0 left-0 right-0 z-30 max-w-md mx-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-100 dark:border-slate-800 px-3 py-2 flex items-center justify-around">
+      <button onclick="resetFilters(); window.scrollTo({top:0, behavior:'smooth'})" class="flex flex-col items-center gap-0.5 text-brand-600 dark:text-brand-400 p-1.5">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span data-i18n="navHome" class="text-[10px] font-bold">መነሻ</span>
+      </button>
+
+      <button onclick="filterByCategory('software')" class="flex flex-col items-center gap-0.5 text-slate-400 hover:text-brand-600 p-1.5 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        <span data-i18n="navSoft" class="text-[10px] font-semibold">ሶፍትዌር</span>
+      </button>
+
+      <button onclick="scrollToSection('freqSection')" class="flex flex-col items-center gap-0.5 text-slate-400 hover:text-brand-600 p-1.5 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/></svg>
+        <span data-i18n="navFreq" class="text-[10px] font-semibold">ፍሪኩዌንሲ</span>
+      </button>
+
+      <button onclick="toggleDrawer('cartDrawer')" class="relative flex flex-col items-center gap-0.5 text-slate-400 hover:text-brand-600 p-1.5 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+        <span data-i18n="navOrders" class="text-[10px] font-semibold">ትዕዛዝ</span>
+      </button>
+
+      <button onclick="openAdminModal()" class="flex flex-col items-center gap-0.5 text-slate-400 hover:text-amber-600 p-1.5 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+        <span data-i18n="navAdmin" class="text-[10px] font-semibold">Admin</span>
+      </button>
+    </nav>
+
+    <!-- ================= MODALS & DRAWERS ================= -->
+
+    <!-- Side Menu Drawer -->
+    <div id="menuDrawer" class="fixed inset-0 z-50 hidden bg-slate-950/60 backdrop-blur-xs">
+      <div class="w-72 max-w-[82vw] h-full bg-white dark:bg-slate-900 p-5 flex flex-col justify-between shadow-2xl animate-fade-slide">
+        <div>
+          <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
+            <div>
+              <h2 class="text-lg font-extrabold text-brand-600">HABTISH DISH</h2>
+              <p class="text-xs text-slate-400">ሀብትሽ ዲሽ &amp; ኤሌክትሮኒክስ</p>
+            </div>
+            <button onclick="toggleDrawer('menuDrawer')" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800">✕</button>
+          </div>
+
+          <div class="mt-4 space-y-1.5">
+            <button onclick="resetFilters(); toggleDrawer('menuDrawer')" class="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-brand-50 dark:hover:bg-slate-800 text-sm font-semibold flex items-center gap-3">
+              <span>🏠</span> <span>መነሻ ገጽ (Home)</span>
+            </button>
+            <button onclick="filterByCategory('receivers'); toggleDrawer('menuDrawer')" class="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-brand-50 dark:hover:bg-slate-800 text-sm font-semibold flex items-center gap-3">
+              <span>📡</span> <span>ሪሲቨሮች (Receivers)</span>
+            </button>
+            <button onclick="filterByCategory('servers'); toggleDrawer('menuDrawer')" class="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-brand-50 dark:hover:bg-slate-800 text-sm font-semibold flex items-center gap-3">
+              <span>⚡</span> <span>VIP ሰርቨሮች (G-SKI &amp; 2424)</span>
+            </button>
+            <button onclick="filterByCategory('software'); toggleDrawer('menuDrawer')" class="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-brand-50 dark:hover:bg-slate-800 text-sm font-semibold flex items-center gap-3">
+              <span>💾</span> <span>ሶፍትዌር &amp; Dump Files</span>
+            </button>
+            <button onclick="scrollToSection('freqSection'); toggleDrawer('menuDrawer')" class="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-brand-50 dark:hover:bg-slate-800 text-sm font-semibold flex items-center gap-3">
+              <span>🔑</span> <span>ፍሪኩዌንሲ &amp; BISS Keys</span>
+            </button>
+            <button onclick="toggleDrawer('menuDrawer'); openAdminModal()" class="w-full text-left px-3.5 py-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/50 text-sm font-bold text-amber-700 dark:text-amber-300 flex items-center gap-3">
+              <span>🔐</span> <span>Admin &amp; Edit Settings</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-2 text-xs text-slate-500">
+          <p class="font-bold text-slate-700 dark:text-slate-300">ቀጥታ መገናኛ (Contact):</p>
+          <a id="menuSoftLink" href="https://t.me/Habtshesoftware" target="_blank" rel="noopener noreferrer" class="block text-sky-600 font-semibold">• Software: t.me/Habtshesoftware</a>
+          <a id="menuAdminLink" href="https://t.me/habtamu7782" target="_blank" rel="noopener noreferrer" class="block text-brand-600 font-semibold">• Admin: @habtamu7782</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notifications Drawer -->
+    <div id="notifDrawer" class="fixed inset-0 z-50 hidden bg-slate-950/60 backdrop-blur-xs flex items-end sm:items-center justify-center">
+      <div class="w-full max-w-md bg-white dark:bg-slate-900 rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl animate-fade-slide">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="text-base font-extrabold">🔔 አዳዲስ ማሳወቂያዎች &amp; BISS</h3>
+          <button onclick="toggleDrawer('notifDrawer')" class="p-1.5 rounded-xl bg-slate-100 dark:bg-slate-800">✕</button>
+        </div>
+        <div class="mt-3 space-y-2.5 max-h-80 overflow-y-auto">
+          <div class="p-3 rounded-2xl bg-brand-50 dark:bg-brand-950/40 border border-brand-100 dark:border-brand-800">
+            <span class="text-[10px] font-bold text-brand-600 uppercase">NEW BISS KEY</span>
+            <p class="text-xs font-bold mt-0.5">TV Varzish &amp; Football HD (Yahsat 52.5°E)</p>
+            <p class="text-[11px] text-slate-500 mt-0.5">11785 H 27500 — Key ዝግጁ ነው!</p>
+          </div>
+          <div class="p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-800">
+            <span class="text-[10px] font-bold text-emerald-600 uppercase">VIP SERVER PROMO</span>
+            <p class="text-xs font-bold mt-0.5">G-SKI &amp; Forever VIP 1-Year Renewal</p>
+            <p class="text-[11px] text-slate-500 mt-0.5">በቴሌብር ወይም በCBE በፍጥነት ይሞላል!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cart & Ethiopian Payment Checkout Drawer -->
+    <div id="cartDrawer" class="fixed inset-0 z-50 hidden bg-slate-950/60 backdrop-blur-xs flex items-end sm:items-center justify-center">
+      <div class="w-full max-w-md max-h-[92vh] overflow-y-auto bg-white dark:bg-slate-900 rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl animate-fade-slide">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="text-base font-extrabold">🛒 የእርስዎ ትዕዛዝ &amp; ክፍያ (Checkout)</h3>
+          <button onclick="toggleDrawer('cartDrawer')" class="p-1.5 rounded-xl bg-slate-100 dark:bg-slate-800">✕</button>
+        </div>
+
+        <div id="cartItemsContainer" class="mt-3 space-y-2 max-h-48 overflow-y-auto"></div>
+
+        <div class="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+          <span class="text-xs font-semibold text-slate-500">ጠቅላላ ክፍያ (Total):</span>
+          <span id="cartTotalText" class="text-lg font-extrabold text-brand-600">0 ETB</span>
+        </div>
+
+        <!-- Dynamic Payment Accounts Container -->
+        <div class="mt-4 space-y-2">
+          <p class="text-xs font-bold text-slate-700 dark:text-slate-200">1. የክፍያ አማራጭ ይምረጡ (ለመቅዳት ይንኩ):</p>
+          <div id="checkoutAccountsList" class="grid grid-cols-1 gap-2"></div>
+        </div>
+
+        <!-- Customer Details & Receipt Upload Form -->
+        <form onsubmit="submitOrderToTelegram(event)" class="mt-4 space-y-2.5 text-xs">
+          <p class="text-xs font-bold text-slate-700 dark:text-slate-200">2. መረጃዎን እና የክፍያ ደረሰኝ ያስገቡ:</p>
+          <div class="grid grid-cols-2 gap-2">
+            <input id="custName" required type="text" placeholder="ሙሉ ስም (Full Name)" class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 outline-none focus:ring-2 focus:ring-brand-500" />
+            <input id="custPhone" required type="tel" placeholder="ስልክ (09...)" class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 outline-none focus:ring-2 focus:ring-brand-500" />
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <select id="custPayMethod" class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 outline-none"></select>
+            <input id="custSerial" type="text" placeholder="Receiver Serial / Note" class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 outline-none" />
+          </div>
+
+          <label class="flex items-center justify-center gap-2 p-2.5 rounded-xl border border-dashed border-brand-300 dark:border-brand-700 bg-brand-50/50 dark:bg-slate-800 cursor-pointer hover:border-brand-500 transition">
+            <span>🧾 የክፍያ ደረሰኝ ፎቶ ይምረጡ (Receipt Screenshot)</span>
+            <input type="file" accept="image/*" onchange="previewReceipt(event)" class="hidden" />
+          </label>
+          <img id="receiptPreview" class="hidden mx-auto max-h-28 rounded-xl object-contain border border-slate-200 dark:border-slate-700" alt="Receipt Preview" />
+
+          <button type="submit" id="sendOrderTgBtn" class="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold shadow-lg shadow-brand-600/25 flex items-center justify-center gap-1.5 transition">
+            <span>🚀 ትዕዛዝ በቴሌግራም ላክ (@habtamu7782)</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Unified Admin Add / Edit Item Modal (Supports Products, Software, VIP Servers, AND Frequencies) -->
+    <div id="productFormModal" class="fixed inset-0 z-50 hidden bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+      <div class="w-full max-w-sm max-h-[92vh] overflow-y-auto bg-white dark:bg-slate-900 rounded-3xl p-5 shadow-2xl animate-fade-slide">
+        <div class="flex items-center justify-between mb-3">
+          <h3 id="prodFormTitle" class="text-sm font-extrabold">+ አዲስ ዕቃ / ሶፍትዌር መጨመሪያ</h3>
+          <button onclick="closeModal('productFormModal')" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500">✕</button>
+        </div>
+
+        <form onsubmit="saveProductForm(event)" class="space-y-2.5 text-xs">
+          <input type="hidden" id="editProdId" />
+          <input type="hidden" id="editItemMode" value="product" />
+
+          <label class="block font-bold text-slate-600 dark:text-slate-300">ምድብ ይምረጡ (Category):</label>
+          <select id="prodCategory" onchange="toggleFormFieldsByCategory(this.value)" class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 outline-none font-semibold">
+            <option value="receivers">📡 ሪሲቨሮች (Receivers)</option>
+            <option value="software">💾 ሶፍትዌር (Software &amp; Dump)</option>
+            <option value="servers">⚡ VIP ሰርቨር (VIP Servers)</option>
+            <option value="frequencies">🔑 ፍሪኩዌንሲ &amp; BISS Key</option>
+            <option value="accessories">🔌 አክሰሰሪ (Accessories)</option>
+          </select>
+
+          <input id="prodTitle" required type="text" placeholder="ርዕስ / ስም (ለምሳሌ: Lifestar 9090 HD ወይም Yahsat 52.5°E)" class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 outline-none focus:ring-2 focus:ring-brand-500" />
+          <input id="prodSubtitle" type="text" placeholder="ዝርዝር መግለጫ / Frequency & BISS Key (ለምሳሌ: 11785 H 27500 | Key: 0103...)" class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 outline-none focus:ring-2 focus:ring-brand-500" />
+
+          <!-- Pricing Fields (Hidden when editing Frequencies) -->
+          <div id="pricingFieldsWrapper" class="space-y-2.5">
+            <div class="grid grid-cols-2 gap-2">
+              <input id="prodPrice" type="number" placeholder="ዋጋ በብር (0 ለነፃ)" class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 outline-none" />
+              <input id="prodOldPrice" type="number" placeholder="የበፊት ዋጋ (Optional)" class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 outline-none" />
+            </div>
+            <input id="prodDiscount" type="text" placeholder="Badge (ለምሳሌ: 25% OFF ወይም FREE)" class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 outline-none" />
+
+            <!-- 1. Photo Upload Section (ፎቶ ማስገቢያ / ፎቶ ቀይር) -->
+            <div class="p-2.5 rounded-2xl bg-violet-50/70 dark:bg-slate-800/90 border border-dashed border-brand-300 dark:border-brand-700 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-brand-700 dark:text-brand-300">🖼️ ፎቶ ማስገቢያ / ፎቶ ቀይር</span>
+                <button type="button" id="clearPhotoBtn" onclick="clearUploadedPhoto()" class="hidden text-[10px] text-rose-600 font-bold">ፎቶ አጥፋ</button>
+              </div>
+              <label class="flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 cursor-pointer hover:border-brand-500 transition font-semibold">
+                <span>📷 ከስልክዎ/ኮምፒውተር ፎቶ ይምረጡ</span>
+                <input id="prodPhotoFile" type="file" accept="image/*" onchange="handlePhotoUpload(event)" class="hidden" />
+              </label>
+              <input id="prodImageUrl" type="url" oninput="handleImageUrlPreview(this.value)" placeholder="ወይም የፎቶ ሊንክ (Image URL Optional)" class="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-[11px] outline-none" />
+              <img id="prodImagePreview" class="hidden mx-auto max-h-28 rounded-xl object-contain border border-slate-200 dark:border-slate-700" alt="Product Preview" />
+            </div>
+
+            <!-- 2. Software File Upload Section (የሶፍትዌር ፋይል ማስገቢያ) -->
+            <div class="p-2.5 rounded-2xl bg-sky-50/70 dark:bg-slate-800/90 border border-dashed border-sky-300 dark:border-sky-700 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-sky-700 dark:text-sky-300">💾 የሶፍትዌር ፋይል ማስገቢያ (.bin / .zip / .abs)</span>
+                <button type="button" id="clearSoftBtn" onclick="clearUploadedSoftware()" class="hidden text-[10px] text-rose-600 font-bold">ፋይል አጥፋ</button>
+              </div>
+              <label class="flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 cursor-pointer hover:border-sky-500 transition font-semibold">
+                <span>📁 የሪሲቨር ሶፍትዌር ፋይል ይምረጡ</span>
+                <input id="prodSoftwareFile" type="file" accept=".bin,.abs,.zip,.rar,.img,.upg,*/*" onchange="handleSoftwareUpload(event)" class="hidden" />
+              </label>
+              <p id="softFileBadge" class="hidden text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-1 rounded-lg truncate"></p>
+              <input id="prodTelegramLink" type="url" placeholder="የቴሌግራም ሶፍትዌር ሊንክ (Default: https://t.me/Habtshesoftware)" class="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-[11px] outline-none" />
+            </div>
+
+            <label class="flex items-center gap-2 pt-1 font-semibold">
+              <input id="prodIsDeal" type="checkbox" class="rounded text-brand-600" />
+              <span>በ "Deals of the Day" (የዕለቱ ልዩ ቅናሾች) ላይ ይታይ</span>
+            </label>
+          </div>
+
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-extrabold mt-2 shadow-md">
+            💾 አስቀምጥ (Save Changes)
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Admin Account & Telegram Settings Modal -->
+    <div id="accountSettingsModal" class="fixed inset-0 z-50 hidden bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+      <div class="w-full max-w-sm max-h-[90vh] overflow-y-auto bg-white dark:bg-slate-900 rounded-3xl p-5 shadow-2xl animate-fade-slide">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-extrabold">⚙️ የባንክ አካውንት እና ቴሌግራም ማስተካከያ</h3>
+          <button onclick="closeModal('accountSettingsModal')" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500">✕</button>
+        </div>
+
+        <form onsubmit="saveAccountSettings(event)" class="space-y-2.5 text-xs">
+          <div class="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/30 space-y-1.5">
+            <p class="font-bold text-purple-800 dark:text-purple-300">CBE (የኢትዮጵያ ንግድ ባንክ)</p>
+            <input id="setCbeAcc" required type="text" placeholder="CBE Account Number" class="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-purple-200 dark:border-purple-800 font-mono" />
+            <input id="setCbeName" required type="text" placeholder="Account Holder Name" class="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-purple-200 dark:border-purple-800" />
+          </div>
+
+          <div class="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/30 space-y-1.5">
+            <p class="font-bold text-amber-800 dark:text-amber-300">BOA (አቢሲኒያ ባንክ)</p>
+            <input id="setBoaAcc" required type="text" placeholder="BOA Account Number" class="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-amber-200 dark:border-amber-800 font-mono" />
+            <input id="setBoaName" required type="text" placeholder="Account Holder Name" class="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-amber-200 dark:border-amber-800" />
+          </div>
+
+          <div class="p-2.5 rounded-xl bg-sky-50 dark:bg-sky-950/30 space-y-1.5">
+            <p class="font-bold text-sky-800 dark:text-sky-300">Telebirr (ቴሌብር)</p>
+            <input id="setTelebirrAcc" required type="text" placeholder="Telebirr Phone Number" class="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-sky-200 dark:border-sky-800 font-mono" />
+            <input id="setTelebirrName" required type="text" placeholder="Account Holder Name" class="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-sky-200 dark:border-sky-800" />
+          </div>
+
+          <div class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 space-y-1.5">
+            <p class="font-bold">Telegram &amp; Admin PIN</p>
+            <input id="setAdminTg" required type="text" placeholder="Admin Telegram (@habtamu7782)" class="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-900" />
+            <input id="setSoftChannel" required type="url" placeholder="Software Channel URL" class="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-900" />
+            <input id="setAdminPin" required type="text" placeholder="Admin PIN (Default: 1234)" class="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-900 font-mono" />
+          </div>
+
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-extrabold shadow-md">
+            💾 አካውንት እና ሊንኮችን አስቀምጥ
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div id="adminModal" class="fixed inset-0 z-50 hidden bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+      <div class="w-full max-w-xs bg-white dark:bg-slate-900 rounded-3xl p-5 shadow-2xl animate-fade-slide">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-extrabold">🔐 Admin Access (የአድሚን መግቢያ)</h3>
+          <button onclick="closeModal('adminModal')" class="text-slate-400 hover:text-slate-600">✕</button>
+        </div>
+        <p class="text-xs text-slate-500 mb-3">ዕቃዎችን፣ ፎቶ፣ ሶፍትዌር እና አካውንቶችን ለማስተካከል የይለፍ ቃል ያስገቡ (PIN: <code id="pinHintDisplay" class="text-brand-600 font-bold">1234</code>)</p>
+        <input id="adminPassInput" type="password" placeholder="Password (1234)" class="w-full px-3.5 py-2.5 text-sm rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 outline-none mb-3" />
+        <div class="flex gap-2">
+          <button onclick="verifyAdmin()" class="flex-1 py-2.5 rounded-xl bg-brand-600 text-white text-xs font-bold">ክፈት (Unlock)</button>
+          <button type="button" onclick="unlockAdminInstant()" class="px-3 py-2.5 rounded-xl bg-amber-100 text-amber-900 text-xs font-extrabold">በቀጥታ ክፈት</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 hidden px-4 py-2 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-xs font-bold shadow-xl transition text-center max-w-[90vw]"></div>
+
+  </div>
+
+  <script>
+    // ================= STATE & STORAGE KEYS =================
+    const STORAGE_KEY_PRODUCTS = 'habtish_dish_products_v2';
+    const STORAGE_KEY_FREQS = 'habtish_dish_freqs_v2';
+    const STORAGE_KEY_SETTINGS = 'habtish_dish_settings_v2';
+
+    const defaultSettings = {
+      cbeAcc: '1000643121739',
+      cbeName: 'Habtamu',
+      boaAcc: '88736613',
+      boaName: 'Habtamu',
+      telebirrAcc: '0970060671',
+      telebirrName: 'Habtamu',
+      adminTg: '@habtamu7782',
+      softChannel: 'https://t.me/Habtshesoftware',
+      adminPin: '1234'
+    };
+
+    const defaultProducts = [
+      {
+        id: 'p1',
+        title: 'Lifestar 9090 HD Receiver',
+        subtitle: '15 Month Forever VIP + Apollo IPTV',
+        category: 'receivers',
+        price: 4850,
+        oldPrice: 5600,
+        discount: '15% OFF',
+        isDeal: true,
+        iconType: 'receiver',
+        color: 'from-violet-100 to-purple-50'
+      },
+      {
+        id: 'p2',
+        title: 'G-SKI VIP Server (1 Year)',
+        subtitle: 'Instant Activation via Serial Number',
+        category: 'servers',
+        price: 1450,
+        oldPrice: 1900,
+        discount: '24% OFF',
+        isDeal: true,
+        iconType: 'server',
+        color: 'from-amber-100 to-orange-50'
+      },
+      {
+        id: 'p3',
+        title: '2424 Forever VIP Renewal',
+        subtitle: '12 Months Sports & Movies Pack',
+        category: 'servers',
+        price: 1650,
+        oldPrice: 2100,
+        discount: '21% OFF',
+        isDeal: true,
+        iconType: 'server',
+        color: 'from-emerald-100 to-teal-50'
+      },
+      {
+        id: 'p4',
+        title: 'Supermax SM-9200 CA HD',
+        subtitle: 'Full HD 1080p + Wi-Fi Antenna',
+        category: 'receivers',
+        price: 3400,
+        oldPrice: 3950,
+        discount: '14% OFF',
+        isDeal: false,
+        iconType: 'receiver',
+        color: 'from-rose-100 to-pink-50'
+      },
+      {
+        id: 'p5',
+        title: 'All Receiver Dump & Software',
+        subtitle: 'Lifestar / Tiger / Goldstar Latest Bin',
+        category: 'software',
+        price: 0,
+        oldPrice: 250,
+        discount: 'FREE',
+        isDeal: false,
+        iconType: 'software',
+        telegramLink: 'https://t.me/Habtshesoftware',
+        color: 'from-sky-100 to-blue-50'
+      },
+      {
+        id: 'p6',
+        title: 'HD Twin Output LNB (0.1dB)',
+        subtitle: 'High Gain Signal Booster for Ethiosat',
+        category: 'accessories',
+        price: 650,
+        oldPrice: 850,
+        discount: '23% OFF',
+        isDeal: false,
+        iconType: 'accessory',
+        color: 'from-indigo-100 to-slate-100'
+      },
+      {
+        id: 'p7',
+        title: 'USB Wi-Fi MT7601 Antenna',
+        subtitle: 'High-Speed Receiver Internet Stick',
+        category: 'accessories',
+        price: 480,
+        oldPrice: 600,
+        discount: '20% OFF',
+        isDeal: false,
+        iconType: 'accessory',
+        color: 'from-fuchsia-100 to-purple-50'
+      },
+      {
+        id: 'p8',
+        title: '90cm Offset Satellite Dish',
+        subtitle: 'Heavy Duty Rust-Proof + Wall Mount',
+        category: 'accessories',
+        price: 2200,
+        oldPrice: 2650,
+        discount: '17% OFF',
+        isDeal: false,
+        iconType: 'dish',
+        color: 'from-teal-100 to-emerald-50'
+      }
+    ];
+
+    const defaultFreqs = [
+      {
+        id: 'f1',
+        sat: 'Yahsat 52.5°E',
+        channel: 'TV Varzish & Football HD',
+        tp: '11785 H 27500',
+        biss: '01 03 AB AF CD 20 21 0E'
+      },
+      {
+        id: 'f2',
+        sat: 'Ethiosat 57°E',
+        channel: 'EBS HD / Kana / Fana / Walta',
+        tp: '11545 H 30000',
+        biss: 'FTA (Free To Air)'
+      },
+      {
+        id: 'f3',
+        sat: 'Amos 4°W',
+        channel: 'Sport 1 / Sport 2 / Yes Pack',
+        tp: '11030 V 27500',
+        biss: 'VIP Server (G-SKI / 2424)'
+      },
+      {
+        id: 'f4',
+        sat: 'Nilesat 7°W',
+        channel: 'MBC Group & Ethiopian Channels',
+        tp: '11470 V 27500',
+        biss: 'FTA (Free To Air)'
+      }
+    ];
+
+    const heroSlides = [
+      {
+        badge: 'VIP SERVER PROMO',
+        title: 'G-SKI & 2424 VIP\nሰርቨር ፈጣን ሙላት',
+        desc: 'የኳስ እና የፊልም ቻናሎችን ያለመቆራረጥ በቴሌብር እና በCBE ይሙሉ።',
+        cta: 'አሁኑኑ ይዘዙ',
+        action: () => filterByCategory('servers')
+      },
+      {
+        badge: 'NEW ARRIVALS',
+        title: 'ዘመናዊ ሪሲቨሮች &\nየዲሽ ዕቃዎች',
+        desc: 'Lifestar, Supermax, LNB እና Wi-Fi አንቴናዎች በተመጣጣኝ ዋጋ።',
+        cta: 'ዕቃዎችን ይመልከቱ',
+        action: () => filterByCategory('receivers')
+      },
+      {
+        badge: 'FREE UPDATES',
+        title: 'አዳዲስ ሶፍትዌር &\nBISS Keys',
+        desc: 'የሁሉም ሪሲቨሮች የቅርብ ጊዜ ሶፍትዌር እና ፍሪኩዌንሲ በነፃ ያግኙ።',
+        cta: 'ፍሪኩዌንሲ ይዩ',
+        action: () => scrollToSection('freqSection')
+      }
+    ];
+
+    const translations = {
+      am: {
+        catReceivers: 'ሪሲቨሮች', catSoftware: 'ሶፍትዌር', catServers: 'VIP ሰርቨር',
+        catFreq: 'ፍሪኩዌንሲ', catAcc: 'አክሰሰሪ', catAll: 'ሁሉም',
+        dealsTitle: 'የዕለቱ ልዩ ቅናሾች', viewAll: 'ሁሉንም ይዩ',
+        popularTitle: 'ተፈላጊ ዕቃዎች & አገልግሎቶች', freqTitle: 'አዳዲስ ፍሪኩዌንሲ & BISS Keys',
+        navHome: 'መነሻ', navSoft: 'ሶፍትዌር', navFreq: 'ፍሪኩዌንሲ', navOrders: 'ትዕዛዝ', navAdmin: 'Admin'
+      },
+      en: {
+        catReceivers: 'Receivers', catSoftware: 'Software', catServers: 'VIP Server',
+        catFreq: 'Frequency', catAcc: 'Accessories', catAll: 'All Items',
+        dealsTitle: 'Deals of the Day', viewAll: 'View All',
+        popularTitle: 'Popular Products & Services', freqTitle: 'Latest Frequencies & BISS Keys',
+        navHome: 'Home', navSoft: 'Software', navFreq: 'BISS/Freq', navOrders: 'Orders', navAdmin: 'Admin'
+      },
+      om: {
+        catReceivers: 'Risiivara', catSoftware: 'Sooftiweerii', catServers: 'VIP Sarvara',
+        catFreq: 'Friikweensii', catAcc: 'Meeshaalee', catAll: 'Hunda',
+        dealsTitle: 'Hir’ina Addaa Har’aa', viewAll: 'Hunda Ilaali',
+        popularTitle: 'Meeshaalee & Tajaajila', freqTitle: 'Friikweensii & BISS Keys Haaraa',
+        navHome: 'Mana', navSoft: 'Sooftiweerii', navFreq: 'Friikweensii', navOrders: 'Ajaja', navAdmin: 'Admin'
+      },
+      ti: {
+        catReceivers: 'ሪሲቨራት', catSoftware: 'ሶፍትዌር', catServers: 'VIP ሰርቨር',
+        catFreq: 'ፍሪኩዌንሲ', catAcc: 'ኣክሰሰሪ', catAll: 'ኩሉ',
+        dealsTitle: 'ፍሉይ ቅናስ ሎሚ', viewAll: 'ኩሉ ርአ',
+        popularTitle: 'ተደለይቲ ኣቑሑት & ኣገልግሎት', freqTitle: 'ሓደሽቲ ፍሪኩዌንሲ & BISS Keys',
+        navHome: 'መበገሲ', navSoft: 'ሶፍትዌር', navFreq: 'ፍሪኩዌንሲ', navOrders: 'ትእዛዝ', navAdmin: 'Admin'
+      }
+    };
+
+    let appSettings = JSON.parse(localStorage.getItem(STORAGE_KEY_SETTINGS)) || defaultSettings;
+    let products = JSON.parse(localStorage.getItem(STORAGE_KEY_PRODUCTS)) || defaultProducts;
+    let frequencies = JSON.parse(localStorage.getItem(STORAGE_KEY_FREQS)) || defaultFreqs;
+    let cart = [];
+    let wishlist = new Set();
+    let currentCategory = 'all';
+    let searchQuery = '';
+    let currentSlide = 0;
+    let isAdmin = false;
+    let tempUploadedImage = '';
+    let tempSoftwareFile = null;
+
+    // ================= INITIALIZATION =================
+    window.addEventListener('DOMContentLoaded', () => {
+      syncSettingsUI();
+      renderHeroSlide();
+      renderAll();
+      setInterval(() => {
+        currentSlide = (currentSlide + 1) % heroSlides.length;
+        renderHeroSlide();
+      }, 5000);
+    });
+
+    function saveToStorage() {
+      try {
+        localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(products));
+        localStorage.setItem(STORAGE_KEY_FREQS, JSON.stringify(frequencies));
+        localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify(appSettings));
+      } catch (err) {
+        try {
+          const lightweightProducts = products.map(p => ({ ...p, softwareDataUrl: undefined }));
+          localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(lightweightProducts));
+          localStorage.setItem(STORAGE_KEY_FREQS, JSON.stringify(frequencies));
+          localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify(appSettings));
+          showToast('⚠️ ፋይሉ ትልቅ ስለሆነ በጊዜያዊ ማህደረ ትውስታ ተቀምጧል');
+        } catch (e) {
+          console.warn('Storage limit reached.');
+        }
+      }
+    }
+
+    function syncSettingsUI() {
+      const cleanHandle = appSettings.adminTg.replace(/^@/, '');
+      document.getElementById('bannerAdminText').textContent = `Admin: ${appSettings.adminTg} | Software Channel`;
+      document.getElementById('bannerSoftLink').href = appSettings.softChannel;
+      document.getElementById('bannerAdminLink').href = `https://t.me/${cleanHandle}`;
+      document.getElementById('bannerAdminHandleBtn').textContent = `💬 ${appSettings.adminTg}`;
+      document.getElementById('menuSoftLink').href = appSettings.softChannel;
+      document.getElementById('menuAdminLink').href = `https://t.me/${cleanHandle}`;
+      document.getElementById('menuAdminLink').textContent = `• Admin: ${appSettings.adminTg}`;
+      document.getElementById('sendOrderTgBtn').innerHTML = `<span>🚀 ትዕዛዝ በቴሌግራም ላክ (${appSettings.adminTg})</span>`;
+      document.getElementById('pinHintDisplay').textContent = appSettings.adminPin;
+
+      // Render Payment Accounts in Checkout
+      const accList = document.getElementById('checkoutAccountsList');
+      accList.innerHTML = `
+        <button type="button" onclick="copyText('${appSettings.cbeAcc}', 'CBE Account (${appSettings.cbeAcc}) Copied!')" class="flex items-center justify-between p-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800 text-left">
+          <div>
+            <p class="text-[11px] font-bold text-purple-800 dark:text-purple-300">የኢትዮጵያ ንግድ ባንክ (CBE)</p>
+            <p class="text-xs font-mono font-extrabold text-slate-900 dark:text-white">${appSettings.cbeAcc} — ${appSettings.cbeName}</p>
+          </div>
+          <span class="text-[10px] font-bold px-2 py-1 rounded-lg bg-purple-600 text-white">Copy</span>
+        </button>
+
+        <button type="button" onclick="copyText('${appSettings.boaAcc}', 'BOA Account (${appSettings.boaAcc}) Copied!')" class="flex items-center justify-between p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-left">
+          <div>
+            <p class="text-[11px] font-bold text-amber-800 dark:text-amber-300">አቢሲኒያ ባንክ (BOA)</p>
+            <p class="text-xs font-mono font-extrabold text-slate-900 dark:text-white">${appSettings.boaAcc} — ${appSettings.boaName}</p>
+          </div>
+          <span class="text-[10px] font-bold px-2 py-1 rounded-lg bg-amber-600 text-white">Copy</span>
+        </button>
+
+        <button type="button" onclick="copyText('${appSettings.telebirrAcc}', 'Telebirr (${appSettings.telebirrAcc}) Copied!')" class="flex items-center justify-between p-2.5 rounded-xl bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800 text-left">
+          <div>
+            <p class="text-[11px] font-bold text-sky-800 dark:text-sky-300">ቴሌብር (Telebirr)</p>
+            <p class="text-xs font-mono font-extrabold text-slate-900 dark:text-white">${appSettings.telebirrAcc} — ${appSettings.telebirrName}</p>
+          </div>
+          <span class="text-[10px] font-bold px-2 py-1 rounded-lg bg-sky-600 text-white">Copy</span>
+        </button>
+      `;
+
+      const paySelect = document.getElementById('custPayMethod');
+      paySelect.innerHTML = `
+        <option value="CBE (${appSettings.cbeAcc} - ${appSettings.cbeName})">CBE (${appSettings.cbeAcc})</option>
+        <option value="BOA (${appSettings.boaAcc} - ${appSettings.boaName})">BOA (${appSettings.boaAcc})</option>
+        <option value="Telebirr (${appSettings.telebirrAcc} - ${appSettings.telebirrName})">Telebirr (${appSettings.telebirrAcc})</option>
+      `;
+    }
+
+    // ================= VISUAL ARTWORK / PHOTO RENDERER =================
+    function renderItemVisual(item, sizeClass = 'w-16 h-16') {
+      if (item.imageUrl) {
+        return `<img src="${item.imageUrl}" alt="${item.title}" class="w-full h-full object-cover rounded-xl" />`;
+      }
+      return getProductArtwork(item.iconType, sizeClass);
+    }
+
+    function getProductArtwork(type, sizeClass = 'w-16 h-16') {
+      if (type === 'receiver') {
+        return `<svg class="${sizeClass} text-brand-600 dark:text-brand-400" viewBox="0 0 80 80" fill="none">
+          <rect x="8" y="26" width="64" height="26" rx="6" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="2.5"/>
+          <circle cx="20" cy="39" r="3" fill="currentColor"/>
+          <rect x="30" y="35" width="24" height="8" rx="2" fill="currentColor" fill-opacity="0.35"/>
+          <circle cx="62" cy="39" r="2" fill="#10b981"/>
+        </svg>`;
+      }
+      if (type === 'server') {
+        return `<svg class="${sizeClass} text-amber-600 dark:text-amber-400" viewBox="0 0 80 80" fill="none">
+          <rect x="16" y="14" width="48" height="20" rx="5" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="2.5"/>
+          <rect x="16" y="42" width="48" height="20" rx="5" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="2.5"/>
+          <circle cx="25" cy="24" r="2.5" fill="#10b981"/>
+          <circle cx="25" cy="52" r="2.5" fill="#10b981"/>
+          <path d="M44 24h12M44 52h12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>`;
+      }
+      if (type === 'software') {
+        return `<svg class="${sizeClass} text-sky-600 dark:text-sky-400" viewBox="0 0 80 80" fill="none">
+          <rect x="20" y="12" width="40" height="56" rx="6" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="2.5"/>
+          <path d="M40 26v22m0 0l-8-8m8 8l8-8" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="30" y1="56" x2="50" y2="56" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>`;
+      }
+      return `<svg class="${sizeClass} text-emerald-600 dark:text-emerald-400" viewBox="0 0 80 80" fill="none">
+        <path d="M22 54 C 22 26, 54 20, 62 46" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="49" cy="33" r="5" fill="currentColor"/>
+        <line x1="40" y1="42" x2="49" y2="33" stroke="currentColor" stroke-width="2.5"/>
+        <path d="M32 56 L 48 56 L 40 44 Z" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="2"/>
+      </svg>`;
+    }
+
+    // ================= RENDERING =================
+    function renderHeroSlide() {
+      const slide = heroSlides[currentSlide];
+      const container = document.getElementById('heroSlideContainer');
+      container.innerHTML = `
+        <div class="max-w-[72%] animate-fade-slide">
+          <span class="inline-block text-[11px] font-bold tracking-wide text-brand-700 dark:text-brand-300 mb-1">${slide.badge}</span>
+          <h1 class="text-xl font-extrabold leading-snug text-slate-900 dark:text-white whitespace-pre-line">${slide.title}</h1>
+          <p class="text-xs text-slate-600 dark:text-slate-300 mt-1.5 leading-relaxed">${slide.desc}</p>
+          <button id="heroCtaBtn" class="mt-3.5 px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-md shadow-brand-600/25 transition">
+            ${slide.cta}
+          </button>
+        </div>
+      `;
+      document.getElementById('heroCtaBtn').onclick = slide.action;
+
+      const dots = document.getElementById('heroDots');
+      dots.innerHTML = heroSlides.map((_, idx) => `
+        <button onclick="setSlide(${idx})" class="h-1.5 rounded-full transition-all ${idx === currentSlide ? 'w-5 bg-brand-600' : 'w-1.5 bg-brand-600/30'}"></button>
+      `).join('');
+    }
+
+    function setSlide(idx) {
+      currentSlide = idx;
+      renderHeroSlide();
+    }
+
+    function renderAll() {
+      renderDeals();
+      renderProductGrid();
+      renderFrequencies();
+      updateCartBadge();
+    }
+
+    function renderDeals() {
+      const deals = products.filter(p => p.isDeal);
+      const container = document.getElementById('dealsCarousel');
+      container.innerHTML = deals.map(item => `
+        <div class="w-40 shrink-0 rounded-2xl bg-white dark:bg-slate-800/90 border border-slate-100 dark:border-slate-700/80 p-2.5 shadow-xs flex flex-col justify-between relative group">
+          <button onclick="toggleWishlist('${item.id}')" class="absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-white/90 dark:bg-slate-900/90 shadow-xs flex items-center justify-center text-xs">
+            ${wishlist.has(item.id) ? '❤️' : '🤍'}
+          </button>
+
+          <div onclick="handleItemAction('${item.id}')" class="cursor-pointer h-24 rounded-xl overflow-hidden bg-gradient-to-br ${item.color} dark:from-slate-700 dark:to-slate-800 flex items-center justify-center mb-2">
+            ${renderItemVisual(item)}
+          </div>
+
+          <div>
+            <h3 class="text-xs font-bold text-slate-800 dark:text-slate-100 line-clamp-2 leading-tight">${item.title}</h3>
+            <div class="flex items-baseline gap-1.5 mt-1.5">
+              <span class="text-xs font-extrabold text-brand-600 dark:text-brand-400">${item.price === 0 ? 'FREE' : item.price + ' ETB'}</span>
+              ${item.oldPrice ? `<span class="text-[10px] text-slate-400 line-through">${item.oldPrice}</span>` : ''}
+            </div>
+            <div class="flex items-center justify-between mt-1.5">
+              <span class="px-1.5 py-0.5 rounded-md bg-rose-50 dark:bg-rose-950/70 text-rose-600 dark:text-rose-400 text-[9px] font-extrabold">${item.discount || 'DEAL'}</span>
+              <button onclick="handleItemAction('${item.id}')" class="px-2 py-1 rounded-lg bg-brand-600 text-white text-[10px] font-bold hover:bg-brand-700">
+                ${item.price === 0 || item.category === 'software' ? 'Download' : '+ Cart'}
+              </button>
+            </div>
+            ${isAdmin ? `
+              <div class="grid grid-cols-2 gap-1 mt-2 pt-1.5 border-t border-slate-100 dark:border-slate-700">
+                <button onclick="openEditProduct('${item.id}')" class="py-1 rounded-lg bg-amber-500 text-white text-[10px] font-extrabold">✏️ አስተካክል</button>
+                <button onclick="deleteProduct('${item.id}')" class="py-1 rounded-lg bg-rose-600 text-white text-[10px] font-extrabold">🗑️ አጥፋ</button>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderProductGrid() {
+      const filtered = products.filter(p => {
+        const matchCat = currentCategory === 'all' || p.category === currentCategory;
+        const q = searchQuery.toLowerCase();
+        const matchSearch = p.title.toLowerCase().includes(q) || p.subtitle.toLowerCase().includes(q);
+        return matchCat && matchSearch;
+      });
+
+      document.getElementById('itemCountBadge').textContent = `${filtered.length} items`;
+
+      const grid = document.getElementById('productGrid');
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="col-span-2 py-10 text-center text-xs text-slate-400">ምንም ዕቃ አልተገኘም (No items found)</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(item => `
+        <div class="rounded-2xl bg-white dark:bg-slate-800/90 border border-slate-100 dark:border-slate-700/80 p-2.5 shadow-xs flex flex-col justify-between relative">
+          <button onclick="toggleWishlist('${item.id}')" class="absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-white/90 dark:bg-slate-900/90 shadow-xs flex items-center justify-center text-xs">
+            ${wishlist.has(item.id) ? '❤️' : '🤍'}
+          </button>
+
+          <div onclick="handleItemAction('${item.id}')" class="cursor-pointer h-28 rounded-xl overflow-hidden bg-gradient-to-br ${item.color} dark:from-slate-700 dark:to-slate-800 flex items-center justify-center mb-2">
+            ${renderItemVisual(item)}
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-[9px] font-bold uppercase tracking-wider text-slate-400">${item.category}</span>
+              ${item.softwareFileName ? `<span class="text-[9px] font-bold text-sky-600 dark:text-sky-400 truncate max-w-[85px]">📎 ${item.softwareFileName}</span>` : ''}
+            </div>
+            <h3 class="text-xs font-extrabold text-slate-800 dark:text-slate-100 line-clamp-1">${item.title}</h3>
+            <p class="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">${item.subtitle}</p>
+
+            <div class="flex items-baseline gap-1.5 mt-1.5">
+              <span class="text-xs font-extrabold text-brand-600 dark:text-brand-400">${item.price === 0 ? 'FREE' : item.price + ' ETB'}</span>
+              ${item.oldPrice ? `<span class="text-[10px] text-slate-400 line-through">${item.oldPrice}</span>` : ''}
+            </div>
+
+            <button onclick="handleItemAction('${item.id}')" class="w-full mt-2 py-1.5 rounded-xl ${item.price === 0 || item.category === 'software' ? 'bg-sky-600 hover:bg-sky-700' : 'bg-brand-600 hover:bg-brand-700'} text-white text-[11px] font-bold transition">
+              ${item.price === 0 || item.category === 'software' ? '⬇️ ሶፍትዌር አውርድ' : '🛒 ይዘዙ (Add to Cart)'}
+            </button>
+
+            ${isAdmin ? `
+              <div class="grid grid-cols-2 gap-1.5 mt-2 pt-2 border-t border-slate-100 dark:border-slate-700">
+                <button onclick="openEditProduct('${item.id}')" class="py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-[10px] font-extrabold shadow-xs">✏️ አስተካክል</button>
+                <button onclick="deleteProduct('${item.id}')" class="py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-[10px] font-extrabold shadow-xs">🗑️ አጥፋ</button>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderFrequencies() {
+      const list = document.getElementById('freqList');
+      list.innerHTML = frequencies.map(f => `
+        <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/70 dark:border-slate-700 flex items-center justify-between gap-2">
+          <div class="min-w-0">
+            <div class="flex items-center gap-1.5">
+              <span class="px-2 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[10px] font-extrabold">${f.sat}</span>
+              <span class="text-xs font-bold text-slate-800 dark:text-slate-100 truncate">${f.channel}</span>
+            </div>
+            <p class="text-[11px] font-mono text-slate-600 dark:text-slate-300 mt-1">TP: <strong>${f.tp}</strong></p>
+            <p class="text-[11px] font-mono text-brand-600 dark:text-brand-400 truncate">Key: <strong>${f.biss}</strong></p>
+          </div>
+
+          <div class="flex flex-col gap-1.5 shrink-0">
+            <button onclick="copyText('${f.tp} | ${f.biss}', 'Frequency & Key Copied!')" class="px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-[10px] font-bold hover:border-brand-500 transition">
+              📋 Copy
+            </button>
+            ${isAdmin ? `
+              <div class="flex gap-1">
+                <button onclick="openEditFreq('${f.id}')" class="px-2 py-1 rounded-lg bg-amber-500 text-white text-[10px] font-extrabold">✏️ Edit</button>
+                <button onclick="deleteFreq('${f.id}')" class="px-2 py-1 rounded-lg bg-rose-600 text-white text-[10px] font-extrabold">🗑️</button>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ================= INTERACTIONS & CART =================
+    function handleItemAction(id) {
+      const item = products.find(p => p.id === id);
+      if (!item) return;
+
+      if (item.price === 0 || item.category === 'software') {
+        if (item.softwareDataUrl) {
+          const link = document.createElement('a');
+          link.href = item.softwareDataUrl;
+          link.download = item.softwareFileName || `${item.title.replace(/\s+/g, '_')}.bin`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          showToast(`⬇️ "${item.softwareFileName || item.title}" እየወረደ ነው...`);
+        } else {
+          const tgUrl = item.telegramLink || appSettings.softChannel;
+          window.open(tgUrl, '_blank', 'noopener,noreferrer');
+          showToast(`📥 ወደ Habtshe Software ቴሌግራም በመሄድ ላይ...`);
+        }
+        return;
+      }
+
+      const existing = cart.find(c => c.id === id);
+      if (existing) existing.qty += 1;
+      else cart.push({ ...item, qty: 1 });
+
+      updateCartBadge();
+      renderCartItems();
+      showToast(`✅ "${item.title}" ወደ ቅርጫት ገብቷል`);
+    }
+
+    function updateCartBadge() {
+      const count = cart.reduce((acc, item) => acc + item.qty, 0);
+      document.getElementById('cartBadge').textContent = count;
+    }
+
+    function renderCartItems() {
+      const container = document.getElementById('cartItemsContainer');
+      const totalEl = document.getElementById('cartTotalText');
+
+      if (cart.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">ቅርጫትዎ ባዶ ነው (Cart is empty)</p>`;
+        totalEl.textContent = '0 ETB';
+        return;
+      }
+
+      let total = 0;
+      container.innerHTML = cart.map(item => {
+        total += item.price * item.qty;
+        return `
+          <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800">
+            <div>
+              <p class="text-xs font-bold">${item.title}</p>
+              <p class="text-[11px] text-brand-600 font-semibold">${item.price} ETB × ${item.qty}</p>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button onclick="changeQty('${item.id}', -1)" class="w-6 h-6 rounded-lg bg-slate-200 dark:bg-slate-700 text-xs font-bold">-</button>
+              <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
+              <button onclick="changeQty('${item.id}', 1)" class="w-6 h-6 rounded-lg bg-brand-600 text-white text-xs font-bold">+</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      totalEl.textContent = `${total.toLocaleString()} ETB`;
+    }
+
+    function changeQty(id, delta) {
+      const idx = cart.findIndex(c => c.id === id);
+      if (idx === -1) return;
+      cart[idx].qty += delta;
+      if (cart[idx].qty <= 0) cart.splice(idx, 1);
+      updateCartBadge();
+      renderCartItems();
+    }
+
+    function submitOrderToTelegram(e) {
+      e.preventDefault();
+      if (cart.length === 0) {
+        showToast('⚠️ እባክዎ መጀመሪያ ዕቃ ይምረጡ!');
+        return;
+      }
+      const name = document.getElementById('custName').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+      const payMethod = document.getElementById('custPayMethod').value;
+      const serial = document.getElementById('custSerial').value.trim();
+      const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+
+      const itemsSummary = cart.map(i => `• ${i.title} (x${i.qty}) - ${i.price * i.qty} ETB`).join('%0A');
+      const msg = `🛒 *NEW ORDER - HABTISH DISH*%0A👤 Name: ${encodeURIComponent(name)}%0A📞 Phone: ${encodeURIComponent(phone)}%0A💳 Payment: ${encodeURIComponent(payMethod)}%0A📟 Serial/Note: ${encodeURIComponent(serial || 'N/A')}%0A%0A*Items:*%0A${itemsSummary}%0A%0A💰 *Total: ${total} ETB*`;
+
+      const cleanHandle = appSettings.adminTg.replace(/^@/, '');
+      window.open(`https://t.me/${cleanHandle}?text=${msg}`, '_blank');
+      showToast(`🚀 ትዕዛዝዎ ወደ ${appSettings.adminTg} ተልኳል!`);
+    }
+
+    function previewReceipt(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = document.getElementById('receiptPreview');
+        img.src = reader.result;
+        img.classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // ================= FILTERS, SEARCH & LANGUAGE =================
+    function filterByCategory(cat) {
+      currentCategory = cat;
+      document.getElementById('activeFilterLabel').textContent = `Category: ${cat.toUpperCase()}`;
+      renderProductGrid();
+    }
+
+    function resetFilters() {
+      currentCategory = 'all';
+      searchQuery = '';
+      document.getElementById('searchInput').value = '';
+      document.getElementById('activeFilterLabel').textContent = 'ሁሉም ሪሲቨሮች፣ VIP ሰርቨሮች እና ሶፍትዌሮች';
+      renderProductGrid();
+    }
+
+    function handleSearch(val) {
+      searchQuery = val;
+      renderProductGrid();
+    }
+
+    function toggleWishlist(id) {
+      if (wishlist.has(id)) wishlist.delete(id);
+      else wishlist.add(id);
+      renderDeals();
+      renderProductGrid();
+    }
+
+    function changeLanguage(lang) {
+      const dict = translations[lang] || translations.am;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) el.textContent = dict[key];
+      });
+      showToast(`🌐 Language: ${lang.toUpperCase()}`);
+    }
+
+    function toggleTheme() {
+      document.documentElement.classList.toggle('dark');
+    }
+
+    // ================= ADMIN UNLOCK & SETTINGS =================
+    function openAdminModal() {
+      if (isAdmin) {
+        showToast('✅ Admin Mode ቀድሞውኑ ክፍት ነው — ከላይ ወይም ካርዶቹ ላይ "✏️ አስተካክል" ይንኩ');
+        return;
+      }
+      document.getElementById('adminModal').classList.remove('hidden');
+    }
+
+    function verifyAdmin() {
+      const pass = document.getElementById('adminPassInput').value.trim();
+      if (pass === appSettings.adminPin || pass === '1234' || pass.toLowerCase() === 'habtish') {
+        unlockAdminInstant();
+      } else {
+        showToast(`❌ የተሳሳተ የይለፍ ቃል (PIN: ${appSettings.adminPin})`);
+      }
+    }
+
+    function unlockAdminInstant() {
+      isAdmin = true;
+      closeModal('adminModal');
+      document.getElementById('adminBanner').classList.remove('hidden');
+      document.getElementById('floatingAdminPlusBtn').classList.remove('hidden');
+      document.getElementById('addFreqAdminBtn').classList.remove('hidden');
+      document.getElementById('headerAdminLabel').textContent = 'Admin ON';
+      renderAll();
+      showToast('🔓 Admin Mode ተከፍቷል! ማንኛውንም ዕቃ "✏️ አስተካክል" ይበሉ');
+    }
+
+    function logoutAdmin() {
+      isAdmin = false;
+      document.getElementById('adminBanner').classList.add('hidden');
+      document.getElementById('floatingAdminPlusBtn').classList.add('hidden');
+      document.getElementById('addFreqAdminBtn').classList.add('hidden');
+      document.getElementById('headerAdminLabel').textContent = 'አድሚን';
+      renderAll();
+      showToast('🔒 Admin Mode ተዘግቷል');
+    }
+
+    function openAccountSettingsModal() {
+      document.getElementById('setCbeAcc').value = appSettings.cbeAcc;
+      document.getElementById('setCbeName').value = appSettings.cbeName;
+      document.getElementById('setBoaAcc').value = appSettings.boaAcc;
+      document.getElementById('setBoaName').value = appSettings.boaName;
+      document.getElementById('setTelebirrAcc').value = appSettings.telebirrAcc;
+      document.getElementById('setTelebirrName').value = appSettings.telebirrName;
+      document.getElementById('setAdminTg').value = appSettings.adminTg;
+      document.getElementById('setSoftChannel').value = appSettings.softChannel;
+      document.getElementById('setAdminPin').value = appSettings.adminPin;
+      document.getElementById('accountSettingsModal').classList.remove('hidden');
+    }
+
+    function saveAccountSettings(e) {
+      e.preventDefault();
+      appSettings = {
+        cbeAcc: document.getElementById('setCbeAcc').value.trim(),
+        cbeName: document.getElementById('setCbeName').value.trim(),
+        boaAcc: document.getElementById('setBoaAcc').value.trim(),
+        boaName: document.getElementById('setBoaName').value.trim(),
+        telebirrAcc: document.getElementById('setTelebirrAcc').value.trim(),
+        telebirrName: document.getElementById('setTelebirrName').value.trim(),
+        adminTg: document.getElementById('setAdminTg').value.trim(),
+        softChannel: document.getElementById('setSoftChannel').value.trim(),
+        adminPin: document.getElementById('setAdminPin').value.trim() || '1234'
+      };
+      saveToStorage();
+      syncSettingsUI();
+      closeModal('accountSettingsModal');
+      showToast('✅ አካውንቶች እና የቴሌግራም ሊንኮች ተስተካክለዋል!');
+    }
+
+    // ================= UNIFIED ADD / EDIT ITEM & FREQUENCY CRUD =================
+    function toggleFormFieldsByCategory(cat) {
+      const pricingWrapper = document.getElementById('pricingFieldsWrapper');
+      const titleInput = document.getElementById('prodTitle');
+      const subInput = document.getElementById('prodSubtitle');
+
+      if (cat === 'frequencies') {
+        pricingWrapper.classList.add('hidden');
+        titleInput.placeholder = 'ሳተላይት እና ቻናል (ለምሳሌ: Yahsat 52.5°E - TV Varzish)';
+        subInput.placeholder = 'ፍሪኩዌንሲ & BISS Key (ለምሳሌ: 11785 H 27500 | Key: 01 03 AB...)';
+      } else {
+        pricingWrapper.classList.remove('hidden');
+        titleInput.placeholder = 'የዕቃው ወይም የሶፍትዌሩ ስም (ለምሳሌ: Lifestar 9090 HD)';
+        subInput.placeholder = 'አጭር መግለጫ (Version / VIP Info)';
+      }
+    }
+
+    function handlePhotoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        tempUploadedImage = reader.result;
+        const preview = document.getElementById('prodImagePreview');
+        preview.src = tempUploadedImage;
+        preview.classList.remove('hidden');
+        document.getElementById('clearPhotoBtn').classList.remove('hidden');
+        showToast('🖼️ ፎቶው ተመርጧል');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handleImageUrlPreview(url) {
+      const trimmed = url.trim();
+      const preview = document.getElementById('prodImagePreview');
+      if (trimmed) {
+        tempUploadedImage = trimmed;
+        preview.src = trimmed;
+        preview.classList.remove('hidden');
+        document.getElementById('clearPhotoBtn').classList.remove('hidden');
+      } else if (!document.getElementById('prodPhotoFile').files.length) {
+        clearUploadedPhoto();
+      }
+    }
+
+    function clearUploadedPhoto() {
+      tempUploadedImage = '';
+      document.getElementById('prodPhotoFile').value = '';
+      document.getElementById('prodImageUrl').value = '';
+      const preview = document.getElementById('prodImagePreview');
+      preview.src = '';
+      preview.classList.add('hidden');
+      document.getElementById('clearPhotoBtn').classList.add('hidden');
+    }
+
+    function handleSoftwareUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const sizeKB = (file.size / 1024).toFixed(1);
+        tempSoftwareFile = {
+          name: file.name,
+          size: `${sizeKB} KB`,
+          dataUrl: reader.result
+        };
+        const badge = document.getElementById('softFileBadge');
+        badge.textContent = `✅ ፋይል ተመርጧል: ${file.name} (${sizeKB} KB)`;
+        badge.classList.remove('hidden');
+        document.getElementById('clearSoftBtn').classList.remove('hidden');
+        if (/\.(bin|abs|upg|img|zip|rar)$/i.test(file.name)) {
+          document.getElementById('prodCategory').value = 'software';
+          toggleFormFieldsByCategory('software');
+          if (!document.getElementById('prodPrice').value) document.getElementById('prodPrice').value = 0;
+        }
+        showToast(`💾 ሶፍትዌር ፋይል (${file.name}) ዝግጁ ነው`);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function clearUploadedSoftware() {
+      tempSoftwareFile = null;
+      document.getElementById('prodSoftwareFile').value = '';
+      const badge = document.getElementById('softFileBadge');
+      badge.textContent = '';
+      badge.classList.add('hidden');
+      document.getElementById('clearSoftBtn').classList.add('hidden');
+    }
+
+    function openProductFormModal(defaultCat = 'receivers') {
+      document.getElementById('editProdId').value = '';
+      document.getElementById('editItemMode').value = 'product';
+      document.getElementById('prodCategory').value = defaultCat;
+      toggleFormFieldsByCategory(defaultCat);
+      document.getElementById('prodTitle').value = '';
+      document.getElementById('prodPrice').value = '';
+      document.getElementById('prodOldPrice').value = '';
+      document.getElementById('prodDiscount').value = '';
+      document.getElementById('prodSubtitle').value = '';
+      document.getElementById('prodTelegramLink').value = appSettings.softChannel;
+      document.getElementById('prodIsDeal').checked = false;
+      clearUploadedPhoto();
+      clearUploadedSoftware();
+      document.getElementById('prodFormTitle').textContent = defaultCat === 'frequencies' ? '+ አዲስ ፍሪኩዌንሲ / BISS Key' : '+ አዲስ ዕቃ / ሶፍትዌር መጨመሪያ';
+      document.getElementById('productFormModal').classList.remove('hidden');
+    }
+
+    function openEditProduct(id) {
+      const item = products.find(p => p.id === id);
+      if (!item) return;
+      document.getElementById('editProdId').value = item.id;
+      document.getElementById('editItemMode').value = 'product';
+      document.getElementById('prodCategory').value = item.category;
+      toggleFormFieldsByCategory(item.category);
+      document.getElementById('prodTitle').value = item.title;
+      document.getElementById('prodPrice').value = item.price;
+      document.getElementById('prodOldPrice').value = item.oldPrice || '';
+      document.getElementById('prodDiscount').value = item.discount || '';
+      document.getElementById('prodSubtitle').value = item.subtitle;
+      document.getElementById('prodTelegramLink').value = item.telegramLink || appSettings.softChannel;
+      document.getElementById('prodIsDeal').checked = !!item.isDeal;
+
+      clearUploadedPhoto();
+      if (item.imageUrl) {
+        tempUploadedImage = item.imageUrl;
+        const preview = document.getElementById('prodImagePreview');
+        preview.src = item.imageUrl;
+        preview.classList.remove('hidden');
+        document.getElementById('clearPhotoBtn').classList.remove('hidden');
+      }
+
+      clearUploadedSoftware();
+      if (item.softwareFileName) {
+        tempSoftwareFile = {
+          name: item.softwareFileName,
+          dataUrl: item.softwareDataUrl || ''
+        };
+        const badge = document.getElementById('softFileBadge');
+        badge.textContent = `✅ የተያያዘ ፋይል: ${item.softwareFileName}`;
+        badge.classList.remove('hidden');
+        document.getElementById('clearSoftBtn').classList.remove('hidden');
+      }
+
+      document.getElementById('prodFormTitle').textContent = '✏️ ዕቃ / ሶፍትዌር ማስተካከያ (Edit)';
+      document.getElementById('productFormModal').classList.remove('hidden');
+    }
+
+    function openEditFreq(id) {
+      const f = frequencies.find(item => item.id === id);
+      if (!f) return;
+      document.getElementById('editProdId').value = f.id;
+      document.getElementById('editItemMode').value = 'frequency';
+      document.getElementById('prodCategory').value = 'frequencies';
+      toggleFormFieldsByCategory('frequencies');
+      document.getElementById('prodTitle').value = `${f.sat} — ${f.channel}`;
+      document.getElementById('prodSubtitle').value = `${f.tp} | ${f.biss}`;
+      document.getElementById('prodFormTitle').textContent = '✏️ ፍሪኩዌንሲ / BISS Key ማስተካከያ';
+      document.getElementById('productFormModal').classList.remove('hidden');
+    }
+
+    function saveProductForm(e) {
+      e.preventDefault();
+      const id = document.getElementById('editProdId').value;
+      const cat = document.getElementById('prodCategory').value;
+      const titleVal = document.getElementById('prodTitle').value.trim();
+      const subVal = document.getElementById('prodSubtitle').value.trim();
+
+      if (cat === 'frequencies') {
+        const titleParts = titleVal.split('—').map(s => s.trim());
+        const subParts = subVal.split('|').map(s => s.trim());
+        const freqPayload = {
+          id: id || 'f_' + Date.now(),
+          sat: titleParts[0] || 'Satellite',
+          channel: titleParts[1] || titleVal,
+          tp: subParts[0] || subVal,
+          biss: subParts[1] || 'FTA'
+        };
+        if (id) {
+          const idx = frequencies.findIndex(f => f.id === id);
+          if (idx !== -1) frequencies[idx] = freqPayload;
+        } else {
+          frequencies.unshift(freqPayload);
+        }
+        saveToStorage();
+        renderFrequencies();
+        closeModal('productFormModal');
+        showToast('✅ ፍሪኩዌንሲ / BISS Key ተስተካክሏል!');
+        return;
+      }
+
+      const iconMap = { receivers: 'receiver', servers: 'server', software: 'software', accessories: 'accessory' };
+      const payload = {
+        id: id || 'p_' + Date.now(),
+        title: titleVal,
+        category: cat,
+        price: Number(document.getElementById('prodPrice').value) || 0,
+        oldPrice: Number(document.getElementById('prodOldPrice').value) || null,
+        discount: document.getElementById('prodDiscount').value.trim() || (cat === 'software' ? 'FREE' : 'NEW'),
+        subtitle: subVal || (tempSoftwareFile ? tempSoftwareFile.name : 'Habtish Dish Quality Guaranteed'),
+        isDeal: document.getElementById('prodIsDeal').checked,
+        iconType: iconMap[cat] || 'receiver',
+        imageUrl: tempUploadedImage || '',
+        softwareFileName: tempSoftwareFile ? tempSoftwareFile.name : '',
+        softwareDataUrl: tempSoftwareFile ? tempSoftwareFile.dataUrl : '',
+        telegramLink: document.getElementById('prodTelegramLink').value.trim() || appSettings.softChannel,
+        color: 'from-violet-100 to-indigo-50'
+      };
+
+      if (id) {
+        const idx = products.findIndex(p => p.id === id);
+        if (idx !== -1) products[idx] = payload;
+      } else {
+        products.unshift(payload);
+      }
+
+      saveToStorage();
+      renderAll();
+      closeModal('productFormModal');
+      showToast('✅ በተሳካ ሁኔታ ተስተካክሎ ተቀምጧል!');
+    }
+
+    function deleteProduct(id) {
+      products = products.filter(p => p.id !== id);
+      saveToStorage();
+      renderAll();
+      showToast('🗑️ ተሰርዟል');
+    }
+
+    function deleteFreq(id) {
+      frequencies = frequencies.filter(f => f.id !== id);
+      saveToStorage();
+      renderFrequencies();
+      showToast('🗑️ ተሰርዟል');
+    }
+
+    // ================= UI HELPERS =================
+    function toggleDrawer(id) {
+      const el = document.getElementById(id);
+      if (id === 'cartDrawer') renderCartItems();
+      el.classList.toggle('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function copyText(text, message) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast(`📋 ${message}`);
+    }
+
+    let toastTimer;
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.remove('hidden');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.add('hidden'), 2600);
+    }
+  </script>
+</body>
+</html>
